@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="coderbunnyModelStoreContainer" CdmEntityContainer="coderbunnyEntities">
+    <EntitySetMapping Name="BoardConfig">
+      <EntityTypeMapping TypeName="coderbunnyModel.BoardConfig">
+        <MappingFragment StoreEntitySet="BoardConfig">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="BoardId" ColumnName="BoardId" />
+          <ScalarProperty Name="AssetType" ColumnName="AssetType" />
+          <ScalarProperty Name="X" ColumnName="X" />
+          <ScalarProperty Name="Y" ColumnName="Y" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="CardMaster">
+      <EntityTypeMapping TypeName="coderbunnyModel.CardMaster">
+        <MappingFragment StoreEntitySet="CardMaster">
+          <ScalarProperty Name="CardId" ColumnName="CardId" />
+          <ScalarProperty Name="CardName" ColumnName="CardName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Game">
+      <EntityTypeMapping TypeName="coderbunnyModel.Game">
+        <MappingFragment StoreEntitySet="Game">
+          <ScalarProperty Name="GameId" ColumnName="GameId" />
+          <ScalarProperty Name="DifficultyLevel" ColumnName="DifficultyLevel" />
+          <ScalarProperty Name="NumberOfPlayers" ColumnName="NumberOfPlayers" />
+          <ScalarProperty Name="GameStatus" ColumnName="GameStatus" />
+          <ScalarProperty Name="RoomId" ColumnName="RoomId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GameMove">
+      <EntityTypeMapping TypeName="coderbunnyModel.GameMove">
+        <MappingFragment StoreEntitySet="GameMove">
+          <ScalarProperty Name="MoveId" ColumnName="MoveId" />
+          <ScalarProperty Name="GameId" ColumnName="GameId" />
+          <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+          <ScalarProperty Name="DiceValue" ColumnName="DiceValue" />
+          <ScalarProperty Name="SequenceId" ColumnName="SequenceId" />
+          <ScalarProperty Name="MoveTime" ColumnName="MoveTime" />
+          <ScalarProperty Name="FromX" ColumnName="FromX" />
+          <ScalarProperty Name="FromY" ColumnName="FromY" />
+          <ScalarProperty Name="ToX" ColumnName="ToX" />
+          <ScalarProperty Name="ToY" ColumnName="ToY" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GamePlayers">
+      <EntityTypeMapping TypeName="coderbunnyModel.GamePlayers">
+        <MappingFragment StoreEntitySet="GamePlayers">
+          <ScalarProperty Name="GamePlayerId" ColumnName="GamePlayerId" />
+          <ScalarProperty Name="GameId" ColumnName="GameId" />
+          <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+          <ScalarProperty Name="PlayerOrder" ColumnName="PlayerOrder" />
+          <ScalarProperty Name="CurrentPosition" ColumnName="CurrentPosition" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="GameTurn">
+      <EntityTypeMapping TypeName="coderbunnyModel.GameTurn">
+        <MappingFragment StoreEntitySet="GameTurn">
+          <ScalarProperty Name="GameTurnId" ColumnName="GameTurnId" />
+          <ScalarProperty Name="GameId" ColumnName="GameId" />
+          <ScalarProperty Name="CurrentPlayerId" ColumnName="CurrentPlayerId" />
+          <ScalarProperty Name="TurnNumber" ColumnName="TurnNumber" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Player">
+      <EntityTypeMapping TypeName="coderbunnyModel.Player">
+        <MappingFragment StoreEntitySet="Player">
+          <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+          <ScalarProperty Name="PlayerName" ColumnName="PlayerName" />
+          <ScalarProperty Name="PlayerImage" ColumnName="PlayerImage" />
+          <ScalarProperty Name="GameId" ColumnName="GameId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PlayerCard">
+      <EntityTypeMapping TypeName="coderbunnyModel.PlayerCard">
+        <MappingFragment StoreEntitySet="PlayerCard">
+          <ScalarProperty Name="PlayerCardId" ColumnName="PlayerCardId" />
+          <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+          <ScalarProperty Name="CardId" ColumnName="CardId" />
+          <ScalarProperty Name="Quantity" ColumnName="Quantity" />
+          <ScalarProperty Name="GameId" ColumnName="GameId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PlayerCardUsage">
+      <EntityTypeMapping TypeName="coderbunnyModel.PlayerCardUsage">
+        <MappingFragment StoreEntitySet="PlayerCardUsage">
+          <ScalarProperty Name="UsageId" ColumnName="UsageId" />
+          <ScalarProperty Name="MoveId" ColumnName="MoveId" />
+          <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+          <ScalarProperty Name="GameId" ColumnName="GameId" />
+          <ScalarProperty Name="CardId" ColumnName="CardId" />
+          <ScalarProperty Name="QuantityUsed" ColumnName="QuantityUsed" />
+          <ScalarProperty Name="UsedAt" ColumnName="UsedAt" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Result">
+      <EntityTypeMapping TypeName="coderbunnyModel.Result">
+        <MappingFragment StoreEntitySet="Result">
+          <ScalarProperty Name="ResultId" ColumnName="ResultId" />
+          <ScalarProperty Name="GameId" ColumnName="GameId" />
+          <ScalarProperty Name="PlayerId" ColumnName="PlayerId" />
+          <ScalarProperty Name="Position" ColumnName="Position" />
+          <ScalarProperty Name="Remarks" ColumnName="Remarks" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

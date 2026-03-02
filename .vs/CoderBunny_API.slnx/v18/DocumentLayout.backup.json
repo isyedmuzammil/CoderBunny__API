@@ -1,0 +1,104 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "E:\\BSSE\\FYP\\CoderBunny_API\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{EBB7A4F5-2CCA-48D5-86D8-F97E66B2A787}|CoderBunny_API\\CoderBunny_API.csproj|e:\\bsse\\fyp\\coderbunny_api\\coderbunny_api\\controllers\\gamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBB7A4F5-2CCA-48D5-86D8-F97E66B2A787}|CoderBunny_API\\CoderBunny_API.csproj|solutionrelative:coderbunny_api\\controllers\\gamecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBB7A4F5-2CCA-48D5-86D8-F97E66B2A787}|CoderBunny_API\\CoderBunny_API.csproj|E:\\BSSE\\FYP\\CoderBunny_API\\coderbunny_api\\app_start\\webapiconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBB7A4F5-2CCA-48D5-86D8-F97E66B2A787}|CoderBunny_API\\CoderBunny_API.csproj|solutionrelative:coderbunny_api\\app_start\\webapiconfig.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBB7A4F5-2CCA-48D5-86D8-F97E66B2A787}|CoderBunny_API\\CoderBunny_API.csproj|E:\\BSSE\\FYP\\CoderBunny_API\\coderbunny_api\\controllers\\cardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBB7A4F5-2CCA-48D5-86D8-F97E66B2A787}|CoderBunny_API\\CoderBunny_API.csproj|solutionrelative:coderbunny_api\\controllers\\cardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBB7A4F5-2CCA-48D5-86D8-F97E66B2A787}|CoderBunny_API\\CoderBunny_API.csproj|e:\\bsse\\fyp\\coderbunny_api\\coderbunny_api\\models\\model1.edmx||{C99AEA30-8E36-4515-B76F-496F5A48A6AA}|",
+      "RelativeMoniker": "D:0:0:{EBB7A4F5-2CCA-48D5-86D8-F97E66B2A787}|CoderBunny_API\\CoderBunny_API.csproj|solutionrelative:coderbunny_api\\models\\model1.edmx||{C99AEA30-8E36-4515-B76F-496F5A48A6AA}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{EBB7A4F5-2CCA-48D5-86D8-F97E66B2A787}|CoderBunny_API\\CoderBunny_API.csproj|E:\\BSSE\\FYP\\CoderBunny_API\\coderbunny_api\\controllers\\boardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{EBB7A4F5-2CCA-48D5-86D8-F97E66B2A787}|CoderBunny_API\\CoderBunny_API.csproj|solutionrelative:coderbunny_api\\controllers\\boardcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Model1.edmx [Diagram1]",
+              "DocumentMoniker": "E:\\BSSE\\FYP\\CoderBunny_API\\CoderBunny_API\\Models\\Model1.edmx",
+              "RelativeDocumentMoniker": "CoderBunny_API\\Models\\Model1.edmx",
+              "ToolTip": "E:\\BSSE\\FYP\\CoderBunny_API\\CoderBunny_API\\Models\\Model1.edmx [Diagram1]",
+              "RelativeToolTip": "CoderBunny_API\\Models\\Model1.edmx [Diagram1]",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001116|",
+              "WhenOpened": "2026-02-28T14:22:25.651Z",
+              "EditorCaption": " [Diagram1]"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "GameController.cs",
+              "DocumentMoniker": "E:\\BSSE\\FYP\\CoderBunny_API\\CoderBunny_API\\Controllers\\GameController.cs",
+              "RelativeDocumentMoniker": "CoderBunny_API\\Controllers\\GameController.cs",
+              "ToolTip": "E:\\BSSE\\FYP\\CoderBunny_API\\CoderBunny_API\\Controllers\\GameController.cs",
+              "RelativeToolTip": "CoderBunny_API\\Controllers\\GameController.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAawDcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-26T19:37:27.826Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "CardController.cs",
+              "DocumentMoniker": "E:\\BSSE\\FYP\\CoderBunny_API\\CoderBunny_API\\Controllers\\CardController.cs",
+              "RelativeDocumentMoniker": "CoderBunny_API\\Controllers\\CardController.cs",
+              "ToolTip": "E:\\BSSE\\FYP\\CoderBunny_API\\CoderBunny_API\\Controllers\\CardController.cs",
+              "RelativeToolTip": "CoderBunny_API\\Controllers\\CardController.cs",
+              "ViewState": "AgIAADcAAAAAAAAAAADwv0cAAAAdAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-26T19:37:22.982Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "WebApiConfig.cs",
+              "DocumentMoniker": "E:\\BSSE\\FYP\\CoderBunny_API\\CoderBunny_API\\App_Start\\WebApiConfig.cs",
+              "RelativeDocumentMoniker": "CoderBunny_API\\App_Start\\WebApiConfig.cs",
+              "ToolTip": "E:\\BSSE\\FYP\\CoderBunny_API\\CoderBunny_API\\App_Start\\WebApiConfig.cs",
+              "RelativeToolTip": "CoderBunny_API\\App_Start\\WebApiConfig.cs",
+              "ViewState": "AgIAABIAAAAAAAAAAAAYwB8AAAABAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-22T20:19:28.064Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "BoardController.cs",
+              "DocumentMoniker": "E:\\BSSE\\FYP\\CoderBunny_API\\CoderBunny_API\\Controllers\\BoardController.cs",
+              "RelativeDocumentMoniker": "CoderBunny_API\\Controllers\\BoardController.cs",
+              "ToolTip": "E:\\BSSE\\FYP\\CoderBunny_API\\CoderBunny_API\\Controllers\\BoardController.cs",
+              "RelativeToolTip": "CoderBunny_API\\Controllers\\BoardController.cs",
+              "ViewState": "AgIAAB4AAAAAAAAAAAAAAA4AAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-22T19:16:53.007Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,375 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="coderbunnyModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="BoardConfig">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="BoardId" Type="int" Nullable="false" />
+    <Property Name="AssetType" Type="varchar" MaxLength="20" />
+    <Property Name="X" Type="int" Nullable="false" />
+    <Property Name="Y" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CardMaster">
+    <Key>
+      <PropertyRef Name="CardId" />
+    </Key>
+    <Property Name="CardId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CardName" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Game">
+    <Key>
+      <PropertyRef Name="GameId" />
+    </Key>
+    <Property Name="GameId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="DifficultyLevel" Type="varchar" MaxLength="50" />
+    <Property Name="NumberOfPlayers" Type="int" />
+    <Property Name="GameStatus" Type="varchar" MaxLength="50" />
+    <Property Name="RoomCode" Type="nvarchar" MaxLength="6" />
+  </EntityType>
+  <EntityType Name="GameMove">
+    <Key>
+      <PropertyRef Name="MoveId" />
+    </Key>
+    <Property Name="MoveId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="GameId" Type="int" Nullable="false" />
+    <Property Name="PlayerId" Type="int" Nullable="false" />
+    <Property Name="DiceValue" Type="int" Nullable="false" />
+    <Property Name="SequenceId" Type="int" Nullable="false" />
+    <Property Name="MoveTime" Type="datetime" />
+    <Property Name="FromX" Type="int" />
+    <Property Name="FromY" Type="int" />
+    <Property Name="ToX" Type="int" />
+    <Property Name="ToY" Type="int" />
+  </EntityType>
+  <EntityType Name="GamePlayers">
+    <Key>
+      <PropertyRef Name="GamePlayerId" />
+    </Key>
+    <Property Name="GamePlayerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="GameId" Type="int" Nullable="false" />
+    <Property Name="PlayerId" Type="int" Nullable="false" />
+    <Property Name="PlayerOrder" Type="int" />
+    <Property Name="CurrentPosition" Type="int" />
+    <Property Name="IsActive" Type="bit" />
+    <Property Name="Direction" Type="nvarchar" MaxLength="20" />
+  </EntityType>
+  <EntityType Name="GameTurn">
+    <Key>
+      <PropertyRef Name="GameTurnId" />
+    </Key>
+    <Property Name="GameTurnId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="GameId" Type="int" Nullable="false" />
+    <Property Name="CurrentPlayerId" Type="int" Nullable="false" />
+    <Property Name="TurnNumber" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Player">
+    <Key>
+      <PropertyRef Name="PlayerId" />
+    </Key>
+    <Property Name="PlayerId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PlayerName" Type="varchar" MaxLength="100" />
+    <Property Name="PlayerImage" Type="varchar" MaxLength="255" />
+    <Property Name="GameId" Type="int" />
+  </EntityType>
+  <EntityType Name="PlayerCard">
+    <Key>
+      <PropertyRef Name="PlayerCardId" />
+    </Key>
+    <Property Name="PlayerCardId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="PlayerId" Type="int" Nullable="false" />
+    <Property Name="CardId" Type="int" Nullable="false" />
+    <Property Name="Quantity" Type="int" Nullable="false" />
+    <Property Name="GameId" Type="int" />
+  </EntityType>
+  <EntityType Name="PlayerCardUsage">
+    <Key>
+      <PropertyRef Name="UsageId" />
+    </Key>
+    <Property Name="UsageId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="MoveId" Type="int" Nullable="false" />
+    <Property Name="PlayerId" Type="int" Nullable="false" />
+    <Property Name="GameId" Type="int" Nullable="false" />
+    <Property Name="CardId" Type="int" Nullable="false" />
+    <Property Name="QuantityUsed" Type="int" Nullable="false" />
+    <Property Name="UsedAt" Type="datetime" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Result">
+    <Key>
+      <PropertyRef Name="ResultId" />
+    </Key>
+    <Property Name="ResultId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="GameId" Type="int" />
+    <Property Name="PlayerId" Type="int" />
+    <Property Name="Position" Type="int" />
+    <Property Name="Remarks" Type="varchar" MaxLength="20" />
+  </EntityType>
+  <Association Name="FK__GamePlaye__GameI__04E4BC85">
+    <End Role="Game" Type="Self.Game" Multiplicity="1" />
+    <End Role="GamePlayers" Type="Self.GamePlayers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Game">
+        <PropertyRef Name="GameId" />
+      </Principal>
+      <Dependent Role="GamePlayers">
+        <PropertyRef Name="GameId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__GamePlaye__Playe__05D8E0BE">
+    <End Role="Player" Type="Self.Player" Multiplicity="1" />
+    <End Role="GamePlayers" Type="Self.GamePlayers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Player">
+        <PropertyRef Name="PlayerId" />
+      </Principal>
+      <Dependent Role="GamePlayers">
+        <PropertyRef Name="PlayerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GameMove_Game">
+    <End Role="Game" Type="Self.Game" Multiplicity="1" />
+    <End Role="GameMove" Type="Self.GameMove" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Game">
+        <PropertyRef Name="GameId" />
+      </Principal>
+      <Dependent Role="GameMove">
+        <PropertyRef Name="GameId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GameMove_Player">
+    <End Role="Player" Type="Self.Player" Multiplicity="1" />
+    <End Role="GameMove" Type="Self.GameMove" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Player">
+        <PropertyRef Name="PlayerId" />
+      </Principal>
+      <Dependent Role="GameMove">
+        <PropertyRef Name="PlayerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GameTurn_Game">
+    <End Role="Game" Type="Self.Game" Multiplicity="1" />
+    <End Role="GameTurn" Type="Self.GameTurn" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Game">
+        <PropertyRef Name="GameId" />
+      </Principal>
+      <Dependent Role="GameTurn">
+        <PropertyRef Name="GameId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_GameTurn_Player">
+    <End Role="Player" Type="Self.Player" Multiplicity="1" />
+    <End Role="GameTurn" Type="Self.GameTurn" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Player">
+        <PropertyRef Name="PlayerId" />
+      </Principal>
+      <Dependent Role="GameTurn">
+        <PropertyRef Name="CurrentPlayerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Player_Game">
+    <End Role="Game" Type="Self.Game" Multiplicity="0..1" />
+    <End Role="Player" Type="Self.Player" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Game">
+        <PropertyRef Name="GameId" />
+      </Principal>
+      <Dependent Role="Player">
+        <PropertyRef Name="GameId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PlayerCard_Card">
+    <End Role="CardMaster" Type="Self.CardMaster" Multiplicity="1" />
+    <End Role="PlayerCard" Type="Self.PlayerCard" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CardMaster">
+        <PropertyRef Name="CardId" />
+      </Principal>
+      <Dependent Role="PlayerCard">
+        <PropertyRef Name="CardId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PlayerCard_Game">
+    <End Role="Game" Type="Self.Game" Multiplicity="0..1" />
+    <End Role="PlayerCard" Type="Self.PlayerCard" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Game">
+        <PropertyRef Name="GameId" />
+      </Principal>
+      <Dependent Role="PlayerCard">
+        <PropertyRef Name="GameId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PlayerCard_Player">
+    <End Role="Player" Type="Self.Player" Multiplicity="1" />
+    <End Role="PlayerCard" Type="Self.PlayerCard" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Player">
+        <PropertyRef Name="PlayerId" />
+      </Principal>
+      <Dependent Role="PlayerCard">
+        <PropertyRef Name="PlayerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Result_Game">
+    <End Role="Game" Type="Self.Game" Multiplicity="0..1" />
+    <End Role="Result" Type="Self.Result" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Game">
+        <PropertyRef Name="GameId" />
+      </Principal>
+      <Dependent Role="Result">
+        <PropertyRef Name="GameId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Result_Player">
+    <End Role="Player" Type="Self.Player" Multiplicity="0..1" />
+    <End Role="Result" Type="Self.Result" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Player">
+        <PropertyRef Name="PlayerId" />
+      </Principal>
+      <Dependent Role="Result">
+        <PropertyRef Name="PlayerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Usage_Card">
+    <End Role="CardMaster" Type="Self.CardMaster" Multiplicity="1" />
+    <End Role="PlayerCardUsage" Type="Self.PlayerCardUsage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CardMaster">
+        <PropertyRef Name="CardId" />
+      </Principal>
+      <Dependent Role="PlayerCardUsage">
+        <PropertyRef Name="CardId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Usage_Game">
+    <End Role="Game" Type="Self.Game" Multiplicity="1" />
+    <End Role="PlayerCardUsage" Type="Self.PlayerCardUsage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Game">
+        <PropertyRef Name="GameId" />
+      </Principal>
+      <Dependent Role="PlayerCardUsage">
+        <PropertyRef Name="GameId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Usage_Move">
+    <End Role="GameMove" Type="Self.GameMove" Multiplicity="1" />
+    <End Role="PlayerCardUsage" Type="Self.PlayerCardUsage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="GameMove">
+        <PropertyRef Name="MoveId" />
+      </Principal>
+      <Dependent Role="PlayerCardUsage">
+        <PropertyRef Name="MoveId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_Usage_Player">
+    <End Role="Player" Type="Self.Player" Multiplicity="1" />
+    <End Role="PlayerCardUsage" Type="Self.PlayerCardUsage" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Player">
+        <PropertyRef Name="PlayerId" />
+      </Principal>
+      <Dependent Role="PlayerCardUsage">
+        <PropertyRef Name="PlayerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="coderbunnyModelStoreContainer">
+    <EntitySet Name="BoardConfig" EntityType="Self.BoardConfig" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CardMaster" EntityType="Self.CardMaster" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Game" EntityType="Self.Game" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GameMove" EntityType="Self.GameMove" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GamePlayers" EntityType="Self.GamePlayers" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="GameTurn" EntityType="Self.GameTurn" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Player" EntityType="Self.Player" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PlayerCard" EntityType="Self.PlayerCard" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="PlayerCardUsage" EntityType="Self.PlayerCardUsage" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Result" EntityType="Self.Result" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__GamePlaye__GameI__04E4BC85" Association="Self.FK__GamePlaye__GameI__04E4BC85">
+      <End Role="Game" EntitySet="Game" />
+      <End Role="GamePlayers" EntitySet="GamePlayers" />
+    </AssociationSet>
+    <AssociationSet Name="FK__GamePlaye__Playe__05D8E0BE" Association="Self.FK__GamePlaye__Playe__05D8E0BE">
+      <End Role="Player" EntitySet="Player" />
+      <End Role="GamePlayers" EntitySet="GamePlayers" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GameMove_Game" Association="Self.FK_GameMove_Game">
+      <End Role="Game" EntitySet="Game" />
+      <End Role="GameMove" EntitySet="GameMove" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GameMove_Player" Association="Self.FK_GameMove_Player">
+      <End Role="Player" EntitySet="Player" />
+      <End Role="GameMove" EntitySet="GameMove" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GameTurn_Game" Association="Self.FK_GameTurn_Game">
+      <End Role="Game" EntitySet="Game" />
+      <End Role="GameTurn" EntitySet="GameTurn" />
+    </AssociationSet>
+    <AssociationSet Name="FK_GameTurn_Player" Association="Self.FK_GameTurn_Player">
+      <End Role="Player" EntitySet="Player" />
+      <End Role="GameTurn" EntitySet="GameTurn" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Player_Game" Association="Self.FK_Player_Game">
+      <End Role="Game" EntitySet="Game" />
+      <End Role="Player" EntitySet="Player" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PlayerCard_Card" Association="Self.FK_PlayerCard_Card">
+      <End Role="CardMaster" EntitySet="CardMaster" />
+      <End Role="PlayerCard" EntitySet="PlayerCard" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PlayerCard_Game" Association="Self.FK_PlayerCard_Game">
+      <End Role="Game" EntitySet="Game" />
+      <End Role="PlayerCard" EntitySet="PlayerCard" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PlayerCard_Player" Association="Self.FK_PlayerCard_Player">
+      <End Role="Player" EntitySet="Player" />
+      <End Role="PlayerCard" EntitySet="PlayerCard" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Result_Game" Association="Self.FK_Result_Game">
+      <End Role="Game" EntitySet="Game" />
+      <End Role="Result" EntitySet="Result" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Result_Player" Association="Self.FK_Result_Player">
+      <End Role="Player" EntitySet="Player" />
+      <End Role="Result" EntitySet="Result" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Usage_Card" Association="Self.FK_Usage_Card">
+      <End Role="CardMaster" EntitySet="CardMaster" />
+      <End Role="PlayerCardUsage" EntitySet="PlayerCardUsage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Usage_Game" Association="Self.FK_Usage_Game">
+      <End Role="Game" EntitySet="Game" />
+      <End Role="PlayerCardUsage" EntitySet="PlayerCardUsage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Usage_Move" Association="Self.FK_Usage_Move">
+      <End Role="GameMove" EntitySet="GameMove" />
+      <End Role="PlayerCardUsage" EntitySet="PlayerCardUsage" />
+    </AssociationSet>
+    <AssociationSet Name="FK_Usage_Player" Association="Self.FK_Usage_Player">
+      <End Role="Player" EntitySet="Player" />
+      <End Role="PlayerCardUsage" EntitySet="PlayerCardUsage" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

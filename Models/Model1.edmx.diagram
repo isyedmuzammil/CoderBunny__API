@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="b9af81d2da9b4775bbbc696fb1cf85fe" Name="Diagram1" ZoomLevel="78">
+        <EntityTypeShape EntityType="coderbunnyModel.CardMaster" Width="1.5" PointX="8.25" PointY="9.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="coderbunnyModel.Game" Width="1.5" PointX="0.75" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="coderbunnyModel.GameMove" Width="1.5" PointX="5.25" PointY="15.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="coderbunnyModel.GamePlayers" Width="1.5" PointX="8.25" PointY="15.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="coderbunnyModel.GameTurn" Width="1.5" PointX="5.25" PointY="19.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="coderbunnyModel.Location" Width="1.5" PointX="3" PointY="17.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="coderbunnyModel.Player" Width="1.5" PointX="3" PointY="21" IsExpanded="true" />
+        <EntityTypeShape EntityType="coderbunnyModel.PlayerCard" Width="1.5" PointX="8.25" PointY="19.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="coderbunnyModel.PlayerCardUsage" Width="1.5" PointX="10.5" PointY="15.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="coderbunnyModel.PlayerLocation" Width="1.5" PointX="5.25" PointY="11.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="coderbunnyModel.Result" Width="1.5" PointX="8.25" PointY="11.75" IsExpanded="true" />
+        <AssociationConnector Association="coderbunnyModel.FK_PlayerCard_Card" ManuallyRouted="false" />
+        <AssociationConnector Association="coderbunnyModel.FK_Usage_Card" ManuallyRouted="false" />
+        <AssociationConnector Association="coderbunnyModel.FK__GamePlaye__GameI__04E4BC85" ManuallyRouted="false" />
+        <AssociationConnector Association="coderbunnyModel.FK_GameMove_Game" ManuallyRouted="false" />
+        <AssociationConnector Association="coderbunnyModel.FK_GameTurn_Game" ManuallyRouted="false" />
+        <AssociationConnector Association="coderbunnyModel.FK_Location_Game" ManuallyRouted="false" />
+        <AssociationConnector Association="coderbunnyModel.FK_Player_Game" ManuallyRouted="false" />
+        <AssociationConnector Association="coderbunnyModel.FK_PlayerCard_Game" ManuallyRouted="false" />
+        <AssociationConnector Association="coderbunnyModel.FK_PlayerLocation_Game" ManuallyRouted="false" />
+        <AssociationConnector Association="coderbunnyModel.FK_Result_Game" ManuallyRouted="false" />
+        <AssociationConnector Association="coderbunnyModel.FK_Usage_Game" ManuallyRouted="false" />
+        <AssociationConnector Association="coderbunnyModel.FK_GameMove_Player" ManuallyRouted="false" />
+        <AssociationConnector Association="coderbunnyModel.FK_Usage_Move" ManuallyRouted="false" />
+        <AssociationConnector Association="coderbunnyModel.FK__GamePlaye__Playe__05D8E0BE" ManuallyRouted="false" />
+        <AssociationConnector Association="coderbunnyModel.FK_GameTurn_Player" ManuallyRouted="false" />
+        <AssociationConnector Association="coderbunnyModel.FK_PlayerLocation_Location" ManuallyRouted="false" />
+        <AssociationConnector Association="coderbunnyModel.FK_PlayerCard_Player" ManuallyRouted="false" />
+        <AssociationConnector Association="coderbunnyModel.FK_PlayerLocation_Player" ManuallyRouted="false" />
+        <AssociationConnector Association="coderbunnyModel.FK_Result_Player" ManuallyRouted="false" />
+        <AssociationConnector Association="coderbunnyModel.FK_Usage_Player" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
