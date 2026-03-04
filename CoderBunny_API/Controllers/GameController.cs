@@ -1,4 +1,4 @@
-﻿using CoderBunny_API.Models;
+using CoderBunny_API.Models;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -51,8 +51,8 @@ namespace CoderBunny_API.Controllers
                         GameId = g.GameId,
                         PlayerId = pid,
                         PlayerOrder = order,
-                        CurrentPosition = 72,
-                        Direction = "right",
+                        CurrentPosition = 64,
+                        Direction = "up",
                         IsActive = true
                     });
 
@@ -228,9 +228,12 @@ namespace CoderBunny_API.Controllers
             if (player == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Player not found");
 
-            // ✅ Ensure starting values only once
+            var game = db.Game.FirstOrDefault(g => g.GameId == move.GameId);
+            if (game == null)
+                return Request.CreateResponse(HttpStatusCode.NotFound, "Game not found");
+
             if (player.CurrentPosition == null)
-                player.CurrentPosition = 72;
+                player.CurrentPosition = 64;
 
             if (string.IsNullOrEmpty(player.Direction))
                 player.Direction = "right";
@@ -248,27 +251,117 @@ namespace CoderBunny_API.Controllers
             {
                 switch (card.CardId)
                 {
-                    case 3: // Forward
+                    case 3:
                         currentPosition = MoveOneStep(currentPosition, direction);
+                        // 🥕 BLUE CARROT AT INDEX 20
+                        if (currentPosition == 20)
+                        {
+                            player.HasEatenCarrot = true;
+                        }
                         break;
 
-                    case 1: // Jump
+                    case 1:
                         currentPosition = MoveOneStep(currentPosition, direction);
+                        // 🥕 BLUE CARROT AT INDEX 20
+                        if (currentPosition == 20)
+                        {
+                            player.HasEatenCarrot = true;
+                        }
                         currentPosition = MoveOneStep(currentPosition, direction);
+                        // 🥕 BLUE CARROT AT INDEX 20
+                        if (currentPosition == 20)
+                        {
+                            player.HasEatenCarrot = true;
+                        }
                         break;
 
-                    case 2: // Right
+                    case 2:
                         direction = TurnRight(direction);
-                        break;
+                        continue;
 
-                    case 4: // Left
+                    case 4:
                         direction = TurnLeft(direction);
-                        break;
+                        continue;
+                }
+
+                if (currentPosition < 0 || currentPosition > 80)
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Out of board");
+
+                // 🔥 Convert index to X,Y
+                int x = currentPosition % 9;
+                int y = currentPosition / 9;
+
+                // 🚧 Check hurdle or carrot
+                var boardItem = db.BoardConfig.FirstOrDefault(b =>
+                    b.BoardId == move.GameId &&   // assuming BoardId == GameId
+                    b.X == x &&
+                    b.Y == y
+                );
+
+                if (boardItem != null)
+                {
+                    if (boardItem.AssetType == "Puddle" ||
+                        boardItem.AssetType == "Fence")
+                    {
+                        return Request.CreateResponse(HttpStatusCode.OK, new
+                        {
+                            move.MoveId,
+                            OldPosition = oldPosition,
+                            NewPosition = oldPosition,
+                            Direction = direction,
+                            Message = "Blocked"
+                        });
+                    }
+
+                }
+
+                // 👥 Check other players
+                bool playerExists = db.GamePlayers.Any(p =>
+                    p.GameId == move.GameId &&
+                    p.PlayerId != player.PlayerId &&
+                    p.CurrentPosition == currentPosition &&
+                    p.IsActive == true
+                );
+
+                if (playerExists)
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest,
+                        "Tile already occupied");
                 }
             }
 
-            if (currentPosition < 0) currentPosition = 0;
-            if (currentPosition > 80) currentPosition = 80;
+            if (currentPosition == 40)
+            {
+                if (!player.HasEatenCarrot)
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest,
+                        "Eat your carrot before reaching destination");
+                }
+
+                // 🏆 Count total moves for this player in this game
+                int totalMoves = db.GameMove.Count(m =>
+                    m.GameId == move.GameId &&
+                    m.PlayerId == move.PlayerId
+                );
+
+                db.Result.Add(new Result
+                {
+                    GameId = move.GameId,
+                    PlayerId = player.PlayerId,
+                    Position = 1,
+                    Remarks = "Winner"
+                });
+
+                game.GameStatus = "Completed";
+
+                db.SaveChanges();
+
+                return Request.CreateResponse(HttpStatusCode.OK, new
+                {
+                    GameStatus = "Completed",
+                    TotalMoves = totalMoves
+                });
+            }
 
             player.CurrentPosition = currentPosition;
             player.Direction = direction;
@@ -281,11 +374,13 @@ namespace CoderBunny_API.Controllers
             return Request.CreateResponse(HttpStatusCode.OK, new
             {
                 move.MoveId,
-                move.GameId,
-                move.PlayerId,
                 OldPosition = oldPosition,
                 NewPosition = currentPosition,
-                Direction = direction
+                Direction = direction,
+                HasEatenCarrot = player.HasEatenCarrot,
+                GameStatus = game.GameStatus
+
+
             });
         }
         private int MoveOneStep(int pos, string direction)
