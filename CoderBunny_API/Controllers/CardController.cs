@@ -1,4 +1,5 @@
-﻿using CoderBunny_API.Models;
+using CoderBunny_API.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -17,55 +18,43 @@ namespace CoderBunny_API.Controllers
             if (moveId <= 0 || cardIds == null || !cardIds.Any())
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid request data");
 
-            var move = db.GameMove.Find(moveId);
+            var move = db.GameMove.FirstOrDefault(m => m.MoveId == moveId);
             if (move == null)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Invalid move");
 
+            // 🔥 Prevent using cards more or less than dice value
             if (cardIds.Count != move.DiceValue)
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "Card count must match dice value");
+                return Request.CreateResponse(HttpStatusCode.BadRequest,
+                    "Card count must match dice value");
 
-            // 🔹 Group cards
-            var groupedCards = cardIds
-                .GroupBy(x => x)
-                .Select(g => new
-                {
-                    CardId = g.Key,
-                    Count = g.Count()
-                })
-                .ToList();
-
-            var cardIdList = groupedCards.Select(g => g.CardId).ToList();
-
-            // 🔹 Fetch inventory
-            var playerCards = db.PlayerCard
-                .Where(pc =>
+            foreach (var cardId in cardIds)
+            {
+                var playerCard = db.PlayerCard.FirstOrDefault(pc =>
                     pc.PlayerId == move.PlayerId &&
                     pc.GameId == move.GameId &&
-                    cardIdList.Contains(pc.CardId)
-                )
-                .ToList();
+                    pc.CardId == cardId
+                );
 
-            if (playerCards.Count != groupedCards.Count)
-                return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid cards for this player or game");
-
-            foreach (var g in groupedCards)
-            {
-                var pc = playerCards.First(p => p.CardId == g.CardId);
-
-                if (pc.Quantity < g.Count)
+                if (playerCard == null)
                     return Request.CreateResponse(HttpStatusCode.BadRequest,
-                        $"Not enough quantity for CardId {g.CardId}");
+                        $"Invalid CardId {cardId} for this player");
 
-                pc.Quantity -= g.Count;
+                if (playerCard.Quantity <= 0)
+                    return Request.CreateResponse(HttpStatusCode.BadRequest,
+                        $"Not enough quantity for CardId {cardId}");
 
+                // 🔥 Decrease inventory by 1 for EACH card used
+                playerCard.Quantity -= 1;
+
+                // 🔥 Insert ONE ROW per card (VERY IMPORTANT)
                 db.PlayerCardUsage.Add(new PlayerCardUsage
                 {
                     MoveId = move.MoveId,
                     PlayerId = move.PlayerId,
                     GameId = move.GameId,
-                    CardId = g.CardId,
-                    QuantityUsed = g.Count,
-                    UsedAt = System.DateTime.Now
+                    CardId = cardId,
+                    QuantityUsed = 1,
+                    UsedAt = DateTime.Now
                 });
             }
 
@@ -154,7 +143,31 @@ namespace CoderBunny_API.Controllers
 
             return Request.CreateResponse(HttpStatusCode.OK, result);
         }
+        [HttpGet]
+        public HttpResponseMessage GetPreviousMoves(int playerId, int gameId)
+        {
+            var moves = db.GameMove
+                .Where(m => m.PlayerId == playerId && m.GameId == gameId)
+                .OrderByDescending(m => m.MoveId)
+                .Select(m => new
+                {
+                    m.MoveId,
+                    DiceValue = m.DiceValue,
+                    Cards = db.PlayerCardUsage
+                        .Where(c => c.MoveId == m.MoveId)
+                        .Select(c => new
+                        {
+                            c.CardId
+                        }).ToList()
+                })
+                .ToList();
 
+            if (!moves.Any())
+                return Request.CreateResponse(HttpStatusCode.NotFound, "No moves found");
+
+            return Request.CreateResponse(HttpStatusCode.OK, moves);
+        }
 
     }
 }
+
