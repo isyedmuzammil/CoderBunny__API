@@ -105,6 +105,26 @@ namespace CoderBunny_API.Controllers
 
             return $"{first}{second}{numbers}";
         }
+        //to resume the old game 
+        [HttpGet]
+        public HttpResponseMessage GetPausedGames()
+        {
+            var games = db.Game
+                .Where(g => g.GameStatus == "GamePaused")
+                .Join(db.GamePlayers,
+                    g => g.GameId,
+                    gp => gp.GameId,
+                    (g, gp) => new
+                    {
+                        gameId = g.GameId,
+                        roomCode = g.RoomCode,
+                        playerId = gp.PlayerId
+                    })
+                .ToList();
+
+            return Request.CreateResponse(HttpStatusCode.OK, games);
+        }
+
         //Resume Game
         [HttpPost]
         public HttpResponseMessage ResumeGame(int gameId)
@@ -175,10 +195,30 @@ namespace CoderBunny_API.Controllers
             if (request == null)
                 return Request.CreateResponse(HttpStatusCode.BadRequest, "Invalid request data.");
 
+            // we need to make sure player use card before rolling dice again
+            var lastMove = db.GameMove
+                .Where(m => m.GameId == request.GameId &&
+                            m.PlayerId == request.PlayerId)
+                .OrderByDescending(m => m.SequenceId)
+                .FirstOrDefault();
+
+            if (lastMove != null)
+            {
+                bool cardsUsed = db.PlayerCardUsage
+                    .Any(u => u.MoveId == lastMove.MoveId);
+
+                if (!cardsUsed)
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest,
+                        "You must use cards before rolling dice again");
+                }
+            }
+
             var gameExists = db.Game.Any(g => g.GameId == request.GameId);
           
             if (!gameExists)
                 return Request.CreateResponse(HttpStatusCode.NotFound, "Game not found.");
+           
 
             // we will Check if player belongs to this game or not
             var isPlayerInGame = db.GamePlayers.Any(gp =>
@@ -446,6 +486,49 @@ namespace CoderBunny_API.Controllers
         }
 
 
+        // to go to previous position means undo
+        [HttpPost]
+        public HttpResponseMessage UndoLastMove(int gameId, int playerId)
+        {
+            var lastMove = db.GameMove
+                .Where(m => m.GameId == gameId && m.PlayerId == playerId)
+                .OrderByDescending(m => m.SequenceId)
+                .FirstOrDefault();
+
+            if (lastMove == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "No move to undo");
+            }
+
+            var player = db.GamePlayers.FirstOrDefault(p =>
+                p.GameId == gameId && p.PlayerId == playerId);
+
+            if (player == null)
+                return Request.CreateResponse(HttpStatusCode.NotFound, "Player not found");
+
+            // move back to previous position
+            int previousPosition = lastMove.FromX ?? player.CurrentPosition.Value;
+
+            player.CurrentPosition = previousPosition;
+
+            // delete related card usages
+            var usages = db.PlayerCardUsage
+                           .Where(u => u.MoveId == lastMove.MoveId)
+                           .ToList();
+
+            db.PlayerCardUsage.RemoveRange(usages);
+
+            // delete the move
+            db.GameMove.Remove(lastMove);
+
+            db.SaveChanges();
+
+            return Request.CreateResponse(HttpStatusCode.OK, new
+            {
+                message = "Move undone",
+                NewPosition = previousPosition
+            });
+        }
         [HttpGet]
         public HttpResponseMessage GetDiceByPlayer(int playerId , int gameId)
         {
