@@ -157,7 +157,8 @@ namespace CoderBunny_API.Controllers
                         .Where(c => c.MoveId == m.MoveId)
                         .Select(c => new
                         {
-                            c.CardId
+                            c.CardId,
+                            CardName = c.CardMaster.CardName   
                         }).ToList()
                 })
                 .ToList();
@@ -170,4 +171,3 @@ namespace CoderBunny_API.Controllers
 
     }
 }
-
