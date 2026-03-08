@@ -176,7 +176,65 @@ namespace CoderBunny_API.Controllers
 
             return Request.CreateResponse(HttpStatusCode.OK, "Game Ended Successfully");
         }
+        [HttpPost]
+        public HttpResponseMessage RestartGame(int gameId)
+        {
+            try
+            {
+                var game = db.Game.FirstOrDefault(g => g.GameId == gameId);
 
+                if (game == null)
+                    return Request.CreateResponse(HttpStatusCode.NotFound, "Game not found");
+
+                // 1️⃣ Delete all moves
+                var moves = db.GameMove.Where(m => m.GameId == gameId).ToList();
+                var moveIds = moves.Select(m => m.MoveId).ToList();
+
+                // 2️⃣ Delete card usages related to moves
+                var cardUsage = db.PlayerCardUsage
+                    .Where(c => moveIds.Contains(c.MoveId))
+                    .ToList();
+
+                db.PlayerCardUsage.RemoveRange(cardUsage);
+                db.GameMove.RemoveRange(moves);
+
+                // 3️⃣ Reset player positions
+                var players = db.GamePlayers.Where(p => p.GameId == gameId).ToList();
+
+                foreach (var player in players)
+                {
+                    player.CurrentPosition = 64;
+                    player.Direction = "up";
+                    player.HasEatenCarrot = false;
+                }
+
+                // 4️⃣ Reset player cards
+                var playerCards = db.PlayerCard.Where(pc => pc.GameId == gameId).ToList();
+
+                foreach (var card in playerCards)
+                {
+                    card.Quantity = 10;
+                }
+
+                // 5️⃣ Reset game status
+                game.GameStatus = "Running";
+
+                db.SaveChanges();
+
+                return Request.CreateResponse(HttpStatusCode.OK, new
+                {
+                    message = "Game restarted successfully",
+                    gameId = gameId
+                });
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(
+                    HttpStatusCode.InternalServerError,
+                    ex.InnerException?.InnerException?.Message ?? ex.Message
+                );
+            }
+        }
         //To see Game State
         [HttpGet]
         public HttpResponseMessage GetGameState(int gameId)
@@ -449,6 +507,7 @@ namespace CoderBunny_API.Controllers
             if (direction == "right") return "up";
             return direction;
         }
+
 
 
         //to see player current location
