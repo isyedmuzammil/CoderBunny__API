@@ -10,7 +10,7 @@ namespace CoderBunny_API.Controllers
 {
     public class CardController : ApiController
     {
-        coderbunnyEntities db = new coderbunnyEntities();
+        coderbunnyEntities4 db = new coderbunnyEntities4();
 
         [HttpPost]
         public HttpResponseMessage UseCards(int moveId, [FromUri] List<int> cardIds)
@@ -168,6 +168,111 @@ namespace CoderBunny_API.Controllers
 
             return Request.CreateResponse(HttpStatusCode.OK, moves);
         }
+        public class FunctionRequest
+        {
+            public int GameId { get; set; }
+            public int PlayerId { get; set; }
+            public List<int> CardIds { get; set; }
+        }
+
+        [HttpPost]
+        public HttpResponseMessage UseFunction([FromBody] FunctionRequest req)
+        {
+            if (req == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.BadRequest, "Request body is null");
+            }
+
+            try
+            {
+                int gameId = req.GameId;
+                int playerId = req.PlayerId;
+                var cardIds = req.CardIds;
+
+                var existing = db.PlayerFunctionCards
+                    .Where(f => f.GameId == gameId && f.PlayerId == playerId)
+                    .ToList();
+
+                // 🟢 SAVE FUNCTION
+                if (cardIds != null && cardIds.Any())
+                {
+                    if (existing.Any())
+                        return Request.CreateResponse(HttpStatusCode.BadRequest, "Function already saved");
+
+                    int order = 1;
+
+                    foreach (var cardId in cardIds)
+                    {
+                        db.PlayerFunctionCards.Add(new PlayerFunctionCards
+                        {
+                            GameId = gameId,
+                            PlayerId = playerId,
+                            CardId = cardId,
+                            OrderNo = order++
+                        });
+                    }
+
+                    db.SaveChanges();
+                    return Request.CreateResponse(HttpStatusCode.OK, "Function saved");
+                }
+
+                // 🔵 USE FUNCTION
+                if (!existing.Any())
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "No function saved");
+                
+                var usedCount = db.PlayerCardUsage
+                    .Where(u => u.GameId == gameId && u.PlayerId == playerId && u.IsFunction == true)
+                    .Select(u => u.MoveId)
+                    .Distinct()
+                    .Count();
+
+                if (usedCount >= 4)
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "Limit reached");
+
+                var move = db.GameMove
+                    .Where(m => m.GameId == gameId && m.PlayerId == playerId)
+                    .OrderByDescending(m => m.SequenceId)
+                    .FirstOrDefault();
+                if (move == null)
+                {
+                    return Request.CreateResponse(HttpStatusCode.BadRequest, "No move found. Roll dice first");
+                }
+
+                foreach (var card in existing)
+                {
+                    db.PlayerCardUsage.Add(new PlayerCardUsage
+                    {
+                        MoveId = move.MoveId,
+                        PlayerId = playerId,
+                        GameId = gameId,
+                        CardId = card.CardId,
+                        QuantityUsed = 1,
+                        UsedAt = DateTime.Now,
+                        IsFunction = true
+                    });
+                }
+
+                db.SaveChanges();
+                return Request.CreateResponse(HttpStatusCode.OK, "Function applied");
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateResponse(HttpStatusCode.InternalServerError, ex.Message);
+            }
+        }
+
+        [HttpGet]
+        public HttpResponseMessage GetFunction(int gameId, int playerId)
+        {
+            var cards = db.PlayerFunctionCards
+                .Where(f => f.GameId == gameId && f.PlayerId == playerId)
+                .OrderBy(f => f.OrderNo)
+                .Select(f => f.CardId)
+                .ToList();
+
+            return Request.CreateResponse(HttpStatusCode.OK, cards);
+        }
 
     }
 }
+
